@@ -1,0 +1,7 @@
+resources:
+- master/deployment.yaml
+- master/service.yaml
+- replica/deployment.yaml
+- replica/service.yaml
+- configmap.yaml
+- sealedsecret.yaml
