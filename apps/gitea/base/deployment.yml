@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea 
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: gitea }
+  template:
+    metadata: 
+      labels: { app: gitea }
+    spec:
+      volumes:
+        - { name: data, persistentVolumeClaim: { claimName: gitea }}
+        - { name: temp, persistentVolumeClaim: { claimName: gitea-tmp }}
+      containers:
+        - name: gitea
+          image: gitea/gitea:1.23.3
+          ports:
+            - { name: ssh , containerPort: 2222 }
+            - { name: http, containerPort: 3000 }
+          volumeMounts:
+            - { name: temp, mountPath: /tmp }
+            - { name: data, mountPath: /data }
+          envFrom:
+            - configMapRef: { name: gitea }
+            - secretRef   : { name: gitea }

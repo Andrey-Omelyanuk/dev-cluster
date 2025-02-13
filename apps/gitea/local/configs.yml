@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitea
+data:
+  # DB_TYPE: "sqlite3"
+  # SSH Port values have to be set here as well for openssh configuration
+  SSH_LISTEN_PORT: "2222"
+  SSH_PORT: "22"

@@ -1,0 +1,13 @@
+namespace: gitea
+resources:
+  - namespace.yml
+  - ../base 
+  - configs.yml
+  - sealed-secrets.yml
+  - ingress.yml
+  - pvc.yml
+  - pvc-tmp.yml
+
+patches:
+  - { target: { kind: Deployment, name: gitea }, path: deployment-patch.yml }
+  - { target: { kind: Service,    name: gitea }, path: service-patch.yml }

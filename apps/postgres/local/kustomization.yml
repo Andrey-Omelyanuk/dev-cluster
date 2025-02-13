@@ -12,6 +12,10 @@ patches:
       kind: StatefulSet 
       name: postgres-master
     path: master/stateful-set-patch.yml
+  - target:
+      kind: Service 
+      name: postgres-master
+    path: master/service-patch.yml
 
 # configMapGenerator:
 # - name: postgres-config

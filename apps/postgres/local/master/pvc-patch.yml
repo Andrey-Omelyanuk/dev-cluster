@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-master-data
 spec:
-  storageClassName: local-path
   resources:
     requests:
       storage: 5Gi

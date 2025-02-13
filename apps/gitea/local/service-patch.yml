@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea
+spec:
+  type: NodePort
+  # gitea will be available on the following IP address
+  externalIPs:
+    - 192.168.49.2

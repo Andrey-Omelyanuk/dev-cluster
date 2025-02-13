@@ -1,3 +1,4 @@
+CLUSTER_NAME=dev-cluster
 ifneq (,$(wildcard .env))
 	include .env
 	export $(shell sed 's/=.*//' .env)
@@ -39,25 +40,30 @@ argocd:
 # -- How to test k8s apps locally -----------------------------------------
 # -------------------------------------------------------------------------
 
-# 0. Install minikube
 install:
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
 	sudo dpkg -i minikube_latest_amd64.deb
+	rm minikube_latest_amd64.deb
 
-# 1. Start minikube
 # Note: Minikube config is close to the real dev cluster.
 # Note: Don't need to setup kubectl context, it will be switched automatically
 start:
-	minikube start -p dev-cluster --nodes=3 --memory=4096 --cpus=4 
+	minikube start -p $(CLUSTER_NAME) --nodes=3 --memory=4096 --cpus=4 
 	kubectl label node dev-cluster     node=public
 	kubectl label node dev-cluster-m02 node=storage
 	kubectl label node dev-cluster-m03 node=main
-	minikube addons enable storage-provisioner-rancher
+	minikube addons enable ingress -p $(CLUSTER_NAME)
 
-# 2. Stop minikube
+update:
+	make secret a=postgres
+	make secret a=gitea
+
+info:
+	minikube profile list
+	minikube ip -p $(CLUSTER_NAME)
+
 stop:
-	minikube stop 
+	minikube stop -p $(CLUSTER_NAME)
 
-# 3. Delete minikube
-clear:
+delete:
 	minikube delete --all
