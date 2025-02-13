@@ -1,0 +1,20 @@
+namespace: postgres 
+resources:
+  - ../base
+  - sealed-secrets.yml
+
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      name: postgres-master-data
+    path: master/pvc-patch.yml
+  - target:
+      kind: StatefulSet 
+      name: postgres-master
+    path: master/stateful-set-patch.yml
+
+# configMapGenerator:
+# - name: postgres-config
+#   files:
+#   - configs/postgresql.conf
+#   - configs/pg_hba.conf

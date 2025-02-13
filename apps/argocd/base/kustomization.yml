@@ -7,4 +7,9 @@ resources:
 - argocd-non-ha-2.14.2.yml
 
 patchesStrategicMerge:
-  - argocd-cm-patch.yml
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: argocd-cm 
+    path: argocd-cm-patch.yml

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-replica
+spec:
+  serviceName: postgres-replica
+  replicas: 1
+  selector: { matchLabels: { role: replica } }
+  template:
+    metadata: { labels: { role: replica } }
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16.6-alpine3.21
+        command:
+          - bash
+          - -c
+          - |
+            echo "Waiting for master to be ready..."
+            until pg_isready -h postgres-master -U replicator; do
+              sleep 2
+            done
+            export PGPASSWORD=$(echo $POSTGRES_PASSWORD)
+            pg_basebackup -h postgres-master -U replicator -D /var/lib/postgresql/data -P -R -X stream
+            exec docker-entrypoint.sh postgres
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - name: data
+            mountPath: /var/lib/postgresql/data
+          - name: config
+            mountPath: /etc/postgresql
+        env:
+          - name: POSTGRES_USER
+            value: replicator
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: password
+        livenessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: config
+        configMap:
+          name: postgres-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-master-data
+  labels: { app: postgres, role: master }
+spec:
+  selector: { matchLabels: { app: postgres, role: master } }
+  # storageClassName: local-path
+  accessModes: 
+    - ReadWriteOnce
+  # Need to specify in each environment
+  # resources:
+  #   requests: 
+  #     storage: 20Gi

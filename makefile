@@ -3,6 +3,7 @@ ifneq (,$(wildcard .env))
 	export $(shell sed 's/=.*//' .env)
 endif
 
+
 dependencies:
 	bash install-local-dependencies.sh
 
@@ -10,9 +11,18 @@ dependencies:
 up:
 	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl apply -f -
 
+show:
+	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm
+
+down:
+	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl delete -f -
+
 # secret a=<name of app>
 secret:
-	kubeseal -f ./apps/$(a)/$(ENV)/secrets.yml -w ./apps/$(a)/$(ENV)/sealed-secrets.yml 
+	kubeseal --controller-name sealed-secrets \
+		--format yaml < ./apps/$(a)/$(ENV)/secrets.yml > ./apps/$(a)/$(ENV)/sealed-secrets.yml 
+
+# kubeseal --format yaml < postgres-secret.yaml > sealed-secret.yaml
 
 # Show admin password and run Dashboard on localhost:8443 
 dashboard:
@@ -30,19 +40,24 @@ argocd:
 # -------------------------------------------------------------------------
 
 # 0. Install minikube
-test-install:
+install:
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
 	sudo dpkg -i minikube_latest_amd64.deb
 
 # 1. Start minikube
+# Note: Minikube config is close to the real dev cluster.
 # Note: Don't need to setup kubectl context, it will be switched automatically
-test-start:
-	minikube start --memory=16384 --cpus=8
+start:
+	minikube start -p dev-cluster --nodes=3 --memory=4096 --cpus=4 
+	kubectl label node dev-cluster     node=public
+	kubectl label node dev-cluster-m02 node=storage
+	kubectl label node dev-cluster-m03 node=main
+	minikube addons enable storage-provisioner-rancher
 
 # 2. Stop minikube
-test-stop:
+stop:
 	minikube stop 
 
 # 3. Delete minikube
-test-clear:
+clear:
 	minikube delete --all

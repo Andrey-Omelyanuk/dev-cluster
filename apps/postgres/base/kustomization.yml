@@ -1,0 +1,9 @@
+
+resources:
+  - namespace.yml
+  - master/configs.yml
+  - master/pvc.yml
+  - master/service.yml
+  - master/stateful-set.yml
+  # - replica/service.yaml
+  # - replica/stateful-set.yaml

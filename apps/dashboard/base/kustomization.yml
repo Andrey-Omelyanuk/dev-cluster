@@ -4,10 +4,10 @@ resources:
   - service-account.yml 
   - cluster-role-binding.yml 
 
-
 helmCharts:
   - name: kubernetes-dashboard
     releaseName: kubernetes-dashboard
     namespace: kubernetes-dashboard 
     repo: https://kubernetes.github.io/dashboard/
     version: "7.10.4"
+    valuesFile: values.yml

@@ -1,0 +1,5 @@
+# TODO: how to move this to the env folder?
+app:
+  scheduling:
+    nodeSelector:
+      node: storage 
