@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata: { name: gitea-dump, labels: { app: gitea } }
+spec:
+  schedule: "0 0 * * 6" # every Saturday at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # nodeSelector: { node: main }
+          securityContext:
+            runAsUser: 1000  # git user, only this user should create a dump
+          volumes:
+            - { name: data, persistentVolumeClaim: { claimName: gitea }}
+            - { name: temp, persistentVolumeClaim: { claimName: gitea-tmp }}
+          containers:
+            - name: gitea 
+              image: gitea/gitea:1.23.3
+              # fix permissions for temp folder, anyone can write to it
+              # command: [ "chmod", "-R", "777", "/tmp",]
+              command: ["/usr/local/bin/gitea", "dump", "-c", "/data/gitea/conf/app.ini", ]
+              workingDir: /tmp
+              envFrom:
+                - configMapRef: { name: gitea-config }
+                - secretRef   : { name: gitea-secret }
+              # ports:
+              #   - { name: ssh , containerPort: 2222 }
+              #   - { name: http, containerPort: 3000 }
+              volumeMounts:
+                - { name: temp, mountPath: /tmp }
+                - { name: data, mountPath: /data }
+              resources:
+                limits: { cpu: '1', memory: 1Gi }
+          restartPolicy: OnFailure
+      backoffLimit: 1

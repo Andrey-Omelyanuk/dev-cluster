@@ -1,21 +1,15 @@
 namespace: postgres 
 resources:
   - ../base
+  - master/configs.yml
   - sealed-secrets.yml
+  - master/pvc.yml
 
 patches:
-  - target:
-      kind: PersistentVolumeClaim
-      name: postgres-master-data
-    path: master/pvc-patch.yml
   - target:
       kind: StatefulSet 
       name: postgres-master
     path: master/stateful-set-patch.yml
-  - target:
-      kind: Service 
-      name: postgres-master
-    path: master/service-patch.yml
 
 # configMapGenerator:
 # - name: postgres-config
