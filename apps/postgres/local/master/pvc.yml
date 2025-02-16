@@ -4,7 +4,8 @@ metadata:
   name: postgres-master-data
   labels: { app: postgres, role: master }
 spec:
-  selector: { matchLabels: { app: postgres, role: master } }
+  selector: 
+    matchLabels: { app: postgres, role: master }
   accessModes: 
     - ReadWriteOnce
   resources:

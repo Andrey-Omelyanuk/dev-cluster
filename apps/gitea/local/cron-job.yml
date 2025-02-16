@@ -7,7 +7,7 @@ spec:
     spec:
       template:
         spec:
-          # nodeSelector: { node: main }
+          nodeSelector: { node: main }
           securityContext:
             runAsUser: 1000  # git user, only this user should create a dump
           volumes:

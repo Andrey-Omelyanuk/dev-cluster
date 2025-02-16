@@ -52,7 +52,6 @@ start:
 	kubectl label node dev-cluster     node=public
 	kubectl label node dev-cluster-m02 node=storage
 	kubectl label node dev-cluster-m03 node=main
-	minikube addons enable ingress -p $(CLUSTER_NAME)
 
 update:
 	make secret a=postgres

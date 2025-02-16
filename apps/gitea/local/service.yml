@@ -9,5 +9,5 @@ spec:
   ports:
   - { name: http, port: 3000, targetPort: http }
   - { name: ssh,  port: 2222, targetPort: ssh }
-  externalIPs:
-    - 192.168.49.2
+  # externalIPs:
+  #   - 192.168.49.2

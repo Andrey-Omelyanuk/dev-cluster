@@ -1,7 +1,7 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: any 
 metadata:
-  name: argocd-server
+  name: any 
 spec:
   template:
     spec:

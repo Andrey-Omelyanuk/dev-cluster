@@ -1,6 +1,5 @@
 namespace: kubernetes-dashboard
 resources:
-  - namespace.yml
   - service-account.yml 
   - cluster-role-binding.yml 
 

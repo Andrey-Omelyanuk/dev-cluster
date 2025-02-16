@@ -1,10 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: argocd
 resources:
+  - namespace.yml
   - ../base 
   # Base
-  - apps/sealed-secrets.yml
+  - apps/core/sealed-secrets.yml
   # - apps/dashboard.yml
   # - apps/monitoring.yml
   # - apps/logs.yml
@@ -15,11 +17,6 @@ resources:
   # - apps/gitea.yml
   # - apps/minio.yml
 
-
 patches:
-  - { target: { kind: Deployment, name: argocd-server                    }, path: argocd-server-patch.yml                    }
-  - { target: { kind: Deployment, name: argocd-repo-server               }, path: argocd-repo-server-patch.yml               }
-  - { target: { kind: Deployment, name: argocd-redis                     }, path: argocd-redis-patch.yml                     }
-  - { target: { kind: Deployment, name: argocd-notifications-controller  }, path: argocd-notifications-controller-patch.yml  }
-  - { target: { kind: Deployment, name: argocd-dex-server                }, path: argocd-dex-server-patch.yml                }
-  - { target: { kind: Deployment, name: argocd-applicationset-controller }, path: argocd-applicationset-controller-patch.yml }
+  - { path: node-selector-patch.yml, target: { kind: Deployment }}
+  - { path: node-selector-patch.yml, target: { kind: StatefulSet }}

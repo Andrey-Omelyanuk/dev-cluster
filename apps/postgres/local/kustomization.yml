@@ -1,15 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 namespace: postgres 
 resources:
+  - namespace.yml
   - ../base
+  - master/pvc.yml
   - master/configs.yml
   - sealed-secrets.yml
-  - master/pvc.yml
 
 patches:
-  - target:
+  - path: master/node-selector-patch.yml
+    target:
       kind: StatefulSet 
       name: postgres-master
-    path: master/stateful-set-patch.yml
 
 # configMapGenerator:
 # - name: postgres-config

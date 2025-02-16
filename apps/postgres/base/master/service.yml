@@ -6,4 +6,4 @@ spec:
   selector: { app: postgres, role: master }
   type: ClusterIP
   ports:
-    - { name: postgres, port: 5432, targetPort: 5432 }
+    - { name: postgres, port: 5432, targetPort: postgres }

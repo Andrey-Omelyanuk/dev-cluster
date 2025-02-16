@@ -1,3 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 namespace: gitea
 resources:
   - namespace.yml
@@ -7,6 +10,7 @@ resources:
   - service.yml
   - pvc.yml
   - pvc-tmp.yml
+  - cron-job.yml
 
 patches:
-  - { target: { kind: Deployment, name: gitea }, path: deployment-patch.yml }
+  - { path: node-selector-patch.yml, target: { kind: Deployment }}
