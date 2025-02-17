@@ -25,3 +25,10 @@ spec:
           envFrom:
             - configMapRef: { name: gitea }
             - secretRef   : { name: gitea }
+          livenessProbe:
+              httpGet: { port: http, path: /api/healthz }
+              initialDelaySeconds: 200
+              timeoutSeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 10

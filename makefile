@@ -1,29 +1,22 @@
-CLUSTER_NAME=dev-cluster
 ifneq (,$(wildcard .env))
 	include .env
 	export $(shell sed 's/=.*//' .env)
 endif
 
-
 dependencies:
 	bash install-local-dependencies.sh
 
-# up a=<name of app>
-up:
-	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl apply -f -
+# -------------------------------------------------------------------------
+# -- Local K8S Controll Panel ---------------------------------------------
+# -------------------------------------------------------------------------
 
-show:
-	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm
+add-cluster-to-local-kubectl:
+	kubectl config set-cluster dev-cluster --server=http://$(HEAD_OF_CLUSTER):28080
+	kubectl config set-context dev-cluster --cluster=dev-cluster
 
-down:
-	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl delete -f -
-
-# secret a=<name of app>
-secret:
-	kubeseal --controller-name sealed-secrets \
-		--format yaml < ./apps/$(a)/$(ENV)/secrets.yml > ./apps/$(a)/$(ENV)/sealed-secrets.yml 
-
-# kubeseal --format yaml < postgres-secret.yaml > sealed-secret.yaml
+connect:
+	kubectl config use-context $(CLUSTER_NAME)
+	ssh andrey@$(HEAD_OF_CLUSTER) kubectl proxy --port=28080 --address=$(HEAD_OF_CLUSTER) --accept-hosts=^10.8.1.*$
 
 # Show admin password and run Dashboard on localhost:8443 
 dashboard:
@@ -35,6 +28,28 @@ argocd:
 	kubectl -n argocd get secret argocd-initial-admin-secret \
 		-o jsonpath="{.data.password}" | base64 -d | tr -d '\n' && echo
 	kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+# -------------------------------------------------------------------------
+# -- Mannual manage app ---------------------------------------------------
+# -------------------------------------------------------------------------
+
+up:
+	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl apply -f -
+
+show:
+	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm
+
+down:
+	kubectl kustomize ./apps/$(a)/$(ENV)/ --enable-helm | kubectl delete -f -
+
+secret:
+	kubeseal --controller-name sealed-secrets \
+		--format yaml < ./apps/$(a)/$(ENV)/secrets.yml > ./apps/$(a)/$(ENV)/sealed-secrets.yml 
+
+secrets-update:
+	make secret a=postgres
+	make secret a=gitea
+	make secret a=gitea-act-runner
 
 # -------------------------------------------------------------------------
 # -- How to test k8s apps locally -----------------------------------------
@@ -52,10 +67,6 @@ start:
 	kubectl label node dev-cluster     node=public
 	kubectl label node dev-cluster-m02 node=storage
 	kubectl label node dev-cluster-m03 node=main
-
-update:
-	make secret a=postgres
-	make secret a=gitea
 
 info:
 	minikube profile list

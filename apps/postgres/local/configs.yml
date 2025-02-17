@@ -6,3 +6,5 @@ metadata:
 data:
   POSTGRES_DB: main 
   POSTGRES_USER: postgres 
+  GITEA_DB: gitea 
+  GITEA_USER: gitea

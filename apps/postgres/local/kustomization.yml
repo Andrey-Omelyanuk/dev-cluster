@@ -6,8 +6,9 @@ resources:
   - namespace.yml
   - ../base
   - master/pvc.yml
-  - master/configs.yml
+  - configs.yml
   - sealed-secrets.yml
+  - service.yml
 
 patches:
   - path: master/node-selector-patch.yml

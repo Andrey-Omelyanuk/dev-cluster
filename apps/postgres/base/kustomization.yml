@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - master/service.yml
   - master/stateful-set.yml
+  - master/job-additional-dbs.yml
   # - replica/service.yaml
   # - replica/stateful-set.yaml

@@ -1,0 +1,45 @@
+# prometheus-application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 69.2.1
+    helm:
+      values: |
+        grafana:
+          persistence:
+            enabled: true # Minikube support PVC
+          service:
+            type: NodePort
+            port: 80
+            targetPort: 3000
+            nodePort: 32000
+        prometheus:
+          prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 8Gi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+      # Create a namespace for the application if it doesn't exist
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+
+# admin:prom-operator
