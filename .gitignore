@@ -1,2 +1,5 @@
 .env
 apps/**/charts
+**/dev/secrets.yml
+**/staging/secrets.yml
+**/prod/secrets.yml

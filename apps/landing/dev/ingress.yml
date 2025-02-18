@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: landing 
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    # traefik.ingress.kubernetes.io/redirect-entry-point: https  # force HTTPS redirection
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+      - edtechworld.pl
+    secretName: edtechworld-pl-tls
+  rules:
+    - host: edtechworld.pl
+      http:
+        paths:
+          - path: / 
+            pathType: Prefix  
+            backend:
+              service: { name: landing, port: { name: http } }

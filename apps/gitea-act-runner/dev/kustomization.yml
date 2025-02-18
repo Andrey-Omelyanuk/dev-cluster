@@ -1,0 +1,10 @@
+namespace: gitea-act-runner
+resources:
+  - namespace.yml
+  - ../base 
+  - configs.yml
+  - sealed-secrets.yml
+  - pvc.yml
+
+patches:
+  - { target: { kind: Deployment, name: gitea-act-runner }, path: deployment-patch.yml }
