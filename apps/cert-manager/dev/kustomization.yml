@@ -1,17 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: cert-manager
 resources:
-  - namespace.yml
   - production.yml 
   - staging.yml 
 
 helmCharts:
   - name        : cert-manager
     releaseName : cert-manager
-    namespace   : cert-manager
-    version     : v1.17.0
+    namespace   : kube-system
+    version     : v1.17.1
     repo        : https://charts.jetstack.io
-    valuesInline:
-      installCRDs: true
+    valuesFile: values.yml

@@ -1,0 +1,12 @@
+installCRDs: true 
+nodeSelector:
+  node: storage
+cainjector:
+  nodeSelector:
+    node: storage 
+# startupapicheck:
+#   nodeSelector:
+#     node: storage 
+webhook:
+  nodeSelector:
+    node: storage 
