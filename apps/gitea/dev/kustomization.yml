@@ -12,6 +12,7 @@ resources:
 patches:
   - path: patch-pvc.yml
   - path: patch-pvc-tmp.yml
+  - path: patch-service.yml
 
 configMapGenerator:
   - name: main 
@@ -22,7 +23,9 @@ configMapGenerator:
       disableNameSuffixHash: true
     literals:
       # SSH Port values have to be set here as well for openssh configuration
-      - GITEA__server__SSH_PORT=2222 
+      # - GITEA__server__SSH_PORT=2222 
+      - GITEA__server__START_SSH_SERVER=true
+      - GITEA__server__SSH_PORT=2222
       - GITEA__server__SSH_LISTEN_PORT=2222 
       # Added postgres configuration
       - GITEA__database__DB_TYPE=postgres
