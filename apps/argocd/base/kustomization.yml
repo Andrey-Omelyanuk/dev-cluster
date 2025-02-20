@@ -7,4 +7,6 @@ resources:
   - argocd-non-ha-2.14.2.yml
 
 patches:
-  - path: enable-helm-patch.yml
+  - { path: node-selector-patch.yml, target: { kind: Deployment }}
+  - { path: node-selector-patch.yml, target: { kind: StatefulSet }}
+  - { path: enable-helm-patch.yml  , target: { kind: ConfigMap, name: argocd-cm }}

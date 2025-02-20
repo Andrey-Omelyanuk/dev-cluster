@@ -3,21 +3,22 @@ kind: Kustomization
 
 namespace: postgres 
 resources:
-  - namespace.yml
   - ../base
-  - master/pvc.yml
-  - configs.yml
   - sealed-secrets.yml
-  - service.yml
 
 patches:
-  - path: master/node-selector-patch.yml
-    target:
-      kind: StatefulSet 
-      name: postgres-master
+  - path: master/patch-pvc.yml
+  - path: master/patch-service.yml
 
-# configMapGenerator:
-# - name: postgres-config
-#   files:
-#   - configs/postgresql.conf
-#   - configs/pg_hba.conf
+configMapGenerator:
+  - name: master 
+    # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
+    # so in this case it is not make sense to use suffix hash for configmap
+    # keep it simple
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - POSTGRES_DB=main 
+      - POSTGRES_USER=postgres 
+      - GITEA_DB=gitea 
+      - GITEA_USER=gitea

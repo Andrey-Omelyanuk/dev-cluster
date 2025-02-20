@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata: 
-  name: postgres-master
+  name: master
 spec:
   replicas: 1
   selector: 
@@ -10,8 +10,9 @@ spec:
     metadata: 
       labels: { app: postgres, role: master }
     spec:
+      nodeSelector: { node: main }
       volumes:
-        - { name: data, persistentVolumeClaim: { claimName: postgres-master-data } }
+        - { name: data, persistentVolumeClaim: { claimName: master } }
       containers:
         - name: postgres
           image: postgres:16.6-alpine3.21
@@ -20,8 +21,8 @@ spec:
           volumeMounts:
             - { name: data  , mountPath: /var/lib/postgresql/data }
           envFrom:
-            - configMapRef: { name: postgres-configs }
-            - secretRef:    { name: postgres-secrets }
+            - configMapRef: { name: master }
+            - secretRef:    { name: main }
           livenessProbe:
             exec: { command: ["pg_isready", "-U", "postgres"] }
             initialDelaySeconds: 30 

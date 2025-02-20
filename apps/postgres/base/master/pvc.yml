@@ -1,13 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-master-data
+  name: master
   labels: { app: postgres, role: master }
 spec:
   selector: 
     matchLabels: { app: postgres, role: master }
   accessModes: 
     - ReadWriteOnce
-  resources:
-    requests: 
-      storage: 5Gi
