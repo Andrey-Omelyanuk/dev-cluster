@@ -6,13 +6,15 @@ resources:
   - ../base 
   - sealed-secrets.yml
   - pv.yml
-  - pvc.yml
   - pv-tmp.yml
-  - pvc-tmp.yml
   - ingress.yml
 
+patches:
+  - path: patch-pvc.yml
+  - path: patch-pvc-tmp.yml
+
 configMapGenerator:
-  - name: gitea 
+  - name: main 
     # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
     # so in this case it is not make sense to use suffix hash for configmap
     # keep it simple
@@ -24,6 +26,6 @@ configMapGenerator:
       - GITEA__server__SSH_LISTEN_PORT=2222 
       # Added postgres configuration
       - GITEA__database__DB_TYPE=postgres
-      - GITEA__database__HOST=postgres-master.postgres.svc.cluster.local:5432
+      - GITEA__database__HOST=master.postgres.svc.cluster.local:5432
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
