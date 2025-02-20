@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata: 
-  name: main 
+  name: minio 
   labels: { app: minio }
 spec:
   storageClassName: manual
