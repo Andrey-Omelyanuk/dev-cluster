@@ -3,7 +3,6 @@ kind: Kustomization
 
 namespace: argocd
 resources:
-  - namespace.yml
   - ../base 
   # Base
   - apps/core/sealed-secrets.yml
