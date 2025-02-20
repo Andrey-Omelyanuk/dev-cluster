@@ -13,15 +13,15 @@ spec:
           image: postgres:16.6-alpine3.21
           env:
             - name: PGHOST
-              value: "postgres-master"
+              value: master
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
+                  name: main 
                   key: POSTGRES_PASSWORD
           envFrom:
-            - configMapRef: { name: postgres-configs }
-            - secretRef:    { name: postgres-secrets }
+            - configMapRef: { name: master }
+            - secretRef:    { name: main }
           command: ["/bin/sh", "-c"]
           args:
             - |

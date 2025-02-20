@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gitea 
+  name: main 
 spec:
   replicas: 1
   selector:
@@ -10,9 +10,10 @@ spec:
     metadata: 
       labels: { app: gitea }
     spec:
+      nodeSelector: { node: main }
       volumes:
-        - { name: data, persistentVolumeClaim: { claimName: gitea }}
-        - { name: temp, persistentVolumeClaim: { claimName: gitea-tmp }}
+        - { name: data, persistentVolumeClaim: { claimName: main }}
+        - { name: tmp,  persistentVolumeClaim: { claimName: tmp }}
       containers:
         - name: gitea
           image: gitea/gitea:1.23.3
@@ -20,11 +21,11 @@ spec:
             - { name: ssh , containerPort: 2222 }
             - { name: http, containerPort: 3000 }
           volumeMounts:
-            - { name: temp, mountPath: /tmp }
+            - { name: tmp , mountPath: /tmp }
             - { name: data, mountPath: /data }
           envFrom:
-            - configMapRef: { name: gitea }
-            - secretRef   : { name: gitea }
+            - configMapRef: { name: main }
+            - secretRef   : { name: main }
           livenessProbe:
               httpGet: { port: http, path: /api/healthz }
               initialDelaySeconds: 200

@@ -3,7 +3,6 @@ kind: Kustomization
 
 namespace: argocd
 resources:
-  - namespace.yml
   - ../base 
   # Base
   - apps/core/sealed-secrets.yml
@@ -18,6 +17,3 @@ resources:
   # - apps/gitea.yml
   # - apps/minio.yml
 
-patches:
-  - { path: node-selector-patch.yml, target: { kind: Deployment }}
-  - { path: node-selector-patch.yml, target: { kind: StatefulSet }}

@@ -3,16 +3,27 @@ kind: Kustomization
 
 namespace: gitea
 resources:
-  - namespace.yml
   - ../base 
-  - configs.yml
   - sealed-secrets.yml
   - pv.yml
   - pvc.yml
   - pv-tmp.yml
   - pvc-tmp.yml
-  - cron-job.yml
   - ingress.yml
 
-patches:
-  - { path: node-selector-patch.yml, target: { kind: Deployment }}
+configMapGenerator:
+  - name: gitea 
+    # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
+    # so in this case it is not make sense to use suffix hash for configmap
+    # keep it simple
+    options:
+      disableNameSuffixHash: true
+    literals:
+      # SSH Port values have to be set here as well for openssh configuration
+      - GITEA__server__SSH_PORT=2222 
+      - GITEA__server__SSH_LISTEN_PORT=2222 
+      # Added postgres configuration
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=postgres-master.postgres.svc.cluster.local:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
