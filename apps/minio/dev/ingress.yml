@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  ingressClassName: traefik
+  tls:
+    - secretName: s3-edtechworld-pl-tls
+      hosts: 
+        - s3.edtechworld.pl
+        - s3-console.edtechworld.pl 
+  rules:
+    - host: s3.edtechworld.pl
+      http:
+        paths:
+          - path: / 
+            pathType: Prefix  
+            backend:
+              service: { name: main, port: { name: http } }
+    - host: s3-console.edtechworld.pl
+      http:
+        paths:
+          - path: / 
+            pathType: Prefix  
+            backend:
+              service: { name: main, port: { name: console } }

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: main 
+  labels: { app: minio }
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: { app: minio }
+  template:
+    metadata:
+      labels: { app: minio }
+    spec:
+      nodeSelector: { node: main }
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command: ['sh', '-c', 'chown -R 1001:1001 /data']
+          volumeMounts:
+            - { mountPath: /data, name: data }
+      containers:
+        - name: minio
+          image: docker.io/bitnami/minio:2025.2.18
+          volumeMounts:
+            - { mountPath: /data                  , name: data }
+            - { mountPath: /tmp                   , name: empty-dir, subPath: tmp-dir }
+            - { mountPath: /opt/bitnami/minio/tmp , name: empty-dir, subPath: app-tmp-dir }
+            - { mountPath: /.mc                   , name: empty-dir, subPath: app-mc-dir }
+          ports:
+            - { name: http   , containerPort: 9000 }
+            - { name: console, containerPort: 9001 }
+          envFrom:
+            - configMapRef: { name: main }
+            - secretRef:    { name: main }
+      volumes:
+        - { name: data, persistentVolumeClaim: { claimName: main } }
+        - { name: empty-dir, emptyDir: {} }

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: main 
+  labels: { app: minio }
+spec:
+  selector:
+    matchLabels: { app: minio }
+  accessModes: 
+    - ReadWriteOnce
