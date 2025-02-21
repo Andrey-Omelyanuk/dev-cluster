@@ -11,6 +11,7 @@ spec:
       labels: { app: gitea }
     spec:
       nodeSelector: { node: main }
+      restartPolicy: Always
       volumes:
         - { name: data, persistentVolumeClaim: { claimName: main }}
         - { name: tmp,  persistentVolumeClaim: { claimName: tmp }}
