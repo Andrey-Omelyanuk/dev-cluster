@@ -1,34 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gitea-act-runner
+  name: act-runner
 spec:
   replicas: 1
   selector:
-    matchLabels: { app: gitea-act-runner }
+    matchLabels: { app: gitea, component: act-runner }
   strategy: {}
   template:
     metadata:
-      labels: { app: gitea-act-runner }
+      labels: { app: gitea, component: act-runner }
     spec:
+      nodeSelector: { node: main }
       restartPolicy: Always
       volumes:
-        - { name: runner-data, persistentVolumeClaim: { claimName: gitea-act-runner } }
+        - { name: data, persistentVolumeClaim: { claimName: act-runner } }
       initContainers:
         - name: fix-data-permissions
           image: busybox
           command: ["sh", "-c", "chown -R 1000:1000 /data"]
           volumeMounts:
-            - { name: runner-data, mountPath: /data }
+            - { name: data, mountPath: /data }
       containers:
-        - name: gitea-act-runner
+        - name: act-runner
           # image: vegardit/gitea-act-runner:dind-latest
           image: vegardit/gitea-act-runner:dind-rootless-latest
           envFrom:
-            - configMapRef: { name: gitea-act-runner }
-            - secretRef   : { name: gitea-act-runner }
+            - configMapRef: { name: act-runner }
+            - secretRef   : { name: act-runner }
           resources: {}
           volumeMounts:
-            - { name: runner-data, mountPath: /data }
+            - { name: data, mountPath: /data }
           securityContext:
             privileged: true

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitea-act-runner
+  labels: { app: gitea, component: act-runner }
+spec:
+  storageClassName: manual
+  accessModes: 
+    - ReadWriteOnce
+  capacity: 
+    storage: 20Gi
+  hostPath: 
+    path: /home/andrey/k8s/gitea-act-runner
