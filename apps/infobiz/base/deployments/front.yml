@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: front
+  labels: { app: infobiz }
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels: { app: infobiz, component: front }
+  template:
+    metadata: 
+      labels: { app: infobiz, component: front }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: front
+          image: front-react 
+          ports:
+            - { name: front-http, containerPort: 80 }
+          resources: {} 

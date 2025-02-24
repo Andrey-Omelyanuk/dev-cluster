@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: pub-sub
+  labels: { app: infobiz }
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels: { app: infobiz, component: pub-sub }
+  template:
+    metadata: 
+      labels: { app: infobiz, component: pub-sub }
+    spec:
+      nodeSelector: { node: main }
+      volumes:
+        - { name: config-file, configMap: { name: pub-sub-config-file } }
+      containers:
+        - name: pub-sub
+          image: centrifugo/centrifugo:v5.2.1
+          command: ['centrifugo']
+          ports:
+            - { name: websocket, containerPort: 8000 }
+          volumeMounts:
+            - { name: config-file, mountPath: /centrifugo/config.json, subPath: config.json }
+          envFrom:
+            - configMapRef: { name: pub-sub }
+            - secretRef:    { name: pub-sub }
+          env:
+            - { name: CENTRIFUGO_PORT, value: "8000" }
+            - { name: CENTRIFUGO_ADDRESS, value: "0.0.0.0" }
+          resources: {} 

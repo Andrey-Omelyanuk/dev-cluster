@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: beat
+  labels: { app: infobiz }
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels: { app: infobiz, component: beat }
+  template:
+    metadata: 
+      labels: { app: infobiz, component: beat }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: beat 
+          image: back 
+          envFrom:
+            - configMapRef: { name: back }
+            - secretRef:    { name: back }
+          resources: {}

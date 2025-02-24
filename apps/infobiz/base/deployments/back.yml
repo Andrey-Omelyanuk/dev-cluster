@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: back
+  labels: { app: infobiz }
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels: { app: infobiz, component: back }
+  template:
+    metadata: 
+      labels: { app: infobiz, component: back }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: back 
+          image: back 
+          ports:
+            - { name: back-http, containerPort: 8000 }
+          envFrom:
+            - configMapRef: { name: back }
+            - secretRef:    { name: back }
+          resources: {}

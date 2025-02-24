@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: flower
+spec:
+  template:
+    spec:
+      containers:
+        - name: flower
+          imagePullPolicy: Always
+          command: [ "celery", "-A", "main", "flower", "--port=8888", "url_prefix=flower" ]
