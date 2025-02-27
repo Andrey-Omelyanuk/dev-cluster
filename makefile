@@ -3,6 +3,34 @@ ifneq (,$(wildcard .env))
 	export $(shell sed 's/=.*//' .env)
 endif
 
+help:
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@echo "  dependencies                - Install local dependencies"
+	@echo "  add-cluster-to-local-kubectl - Add cluster to local kubectl"
+	@echo "  connect                     - Connect to the cluster"
+	@echo "  dashboard                   - Show admin password and run Dashboard on localhost:8443"
+	@echo "  argocd                      - Show admin password and run ArgoCD UI on localhost:8080"
+	@echo "  dependencies                - Install dependencies"
+	@echo ""
+	@echo " -- Mannual manage app ---------------------------------------------"
+	@echo "  up     a=<app>              - Deploy/Update app"
+	@echo "  show   a=<app>              - Show app config"
+	@echo "  down   a=<app>              - Remove app"
+	@echo "  secret a=<app>              - Encrypt secrets in repo"
+	@echo "  all-secrets-update          - Update all secrets"
+	@echo "  registry-update             - Update registry credentials"
+	@echo ""
+	@echo " -- For local testing: ---------------------------------------------"
+	@echo "  install                     - Install Minikube"
+	@echo "  start                       - Start Minikube"
+	@echo "  info                        - Show Minikube info"
+	@echo "  stop                        - Stop Minikube"
+	@echo "  delete                      - Delete Minikube"
+
+
+
 dependencies:
 	bash install-local-dependencies.sh
 
@@ -46,10 +74,21 @@ secret:
 	kubeseal --controller-name sealed-secrets \
 		--format yaml < ./apps/$(a)/$(ENV)/secrets.yml > ./apps/$(a)/$(ENV)/sealed-secrets.yml 
 
-secrets-update:
+all-secrets-update:
 	make secret a=postgres
+	make secret a=minio
 	make secret a=gitea
 	make secret a=gitea-act-runner
+	make secret a=infobiz
+
+registry-update:
+	docker login repo.edtechworld.pl
+	@for ns in infobiz gitea; do \
+		kubectl create secret generic registry-credentials \
+			--from-file=.dockerconfigjson=/home/andrey/.docker/config.json \
+			--type=kubernetes.io/dockerconfigjson \
+			--namespace=$$ns; \
+	done
 
 # -------------------------------------------------------------------------
 # -- How to test k8s apps locally -----------------------------------------

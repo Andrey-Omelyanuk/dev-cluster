@@ -1,0 +1,16 @@
+{
+  "namespaces": [
+    {
+      "name": "admin",
+      "history_size": 10,
+      "history_ttl": "60s",
+      "force_recovery": true
+    },
+    {
+      "name": "user",
+      "history_size": 10,
+      "history_ttl": "60s",
+      "force_recovery": true
+    }
+  ]
+}

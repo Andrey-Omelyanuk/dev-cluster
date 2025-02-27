@@ -12,10 +12,8 @@ spec:
       labels: { app: infobiz, component: flower }
     spec:
       nodeSelector: { node: main }
-      imagePullSecrets:
-        - name: registry-credentials
       containers:
-        - name: flower
+        - name: back-flower
           image: back 
           ports:
             - { name: flower-http, containerPort: 8888 }

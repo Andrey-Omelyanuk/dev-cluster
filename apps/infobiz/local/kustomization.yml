@@ -1,0 +1,67 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: infobiz
+resources:
+  - ../base
+  - sealed-secrets.yml
+
+images:
+  - { name: front-react, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
+  - { name: back       , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
+
+patches:
+  - path: deployment-patches/back.yml
+  - path: deployment-patches/beat.yml
+  - path: deployment-patches/flower.yml
+  - path: deployment-patches/front.yml
+  - path: deployment-patches/worker.yml
+  - path: service-patches/back.yml
+  - path: service-patches/flower.yml
+  - path: service-patches/front.yml
+
+configMapGenerator:
+
+  - name: back
+    # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
+    # so in this case it is not make sense to use suffix hash for configmap
+    # keep it simple
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - DEBUG=True
+      # - DEBUG_TOOLBAR=True
+      - SCHEMA=http
+      - DOMAIN=dev.localhost
+      - ALLOWED_HOSTS=dev.localhost
+      # - CSRF_TRUSTED_ORIGINS=https://.online
+      - ADMINS=Andrey=omelyanukandrey@gmail.com
+      - MANAGERS=omelyanukandrey@gmail.com
+      - DB_HOST=master.postgres.svc.cluster.local
+      - DB_PORT=5432
+      - DB_NAME=infobiz
+      - DB_USER=infobiz
+      # - DB_PASSWORD : secret
+      - S3_ENDPOINT_URL=http://main.minio.svc.cluster.local:9000
+      - S3_EXTERNAL_ENDPOINT_URL=s3.localhost
+      - S3_BUCKET_NAME=infobiz
+      # - S3_ACCESS_KEY_ID : secret
+      # - S3_SECRET_ACCESS_KEY : secret
+      # - SECRET_KEY : secret
+      # - CENTRIFUGO_TOKEN_SECRET     : secret
+      # - CENTRIFUGO_HTTP_API_KEY     : secret 
+      - CENTRIFUGO_HTTP_API_ENDPOINT=http://pub-sub:8000
+      - CELERY_BROKER_URL=redis://main.redis.svc.cluster.local:6379/0
+
+  - name: pub-sub
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - CENTRIFUGO_LOG_LEVEL=debug
+      - CENTRIFUGO_ALLOWED_ORIGINS="['*']"
+
+  - name: pub-sub-config-file
+    options:
+      disableNameSuffixHash: true
+    files:
+      - config.json=pub-sub-config.json

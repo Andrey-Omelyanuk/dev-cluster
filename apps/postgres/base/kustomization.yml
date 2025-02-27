@@ -6,7 +6,6 @@ resources:
   - namespace.yml
   - master/pvc.yml
   - master/stateful-set.yml
-  - master/job-additional-dbs.yml
   - master/service.yml
   # - replica/service.yaml
   # - replica/stateful-set.yaml

@@ -5,6 +5,8 @@ namespace: postgres
 resources:
   - ../base
   - sealed-secrets.yml
+  - jobs/create-gitea-db.yml
+  - jobs/create-infobiz-db.yml
 
 patches:
   - path: master/patch-pvc.yml
