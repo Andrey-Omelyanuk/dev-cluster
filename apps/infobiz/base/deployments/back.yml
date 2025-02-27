@@ -17,6 +17,8 @@ spec:
       containers:
         - name: back 
           image: back 
+          imagePullPolicy: Always
+          command: [ "sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
           ports:
             - { name: back-http, containerPort: 8000 }
           envFrom:

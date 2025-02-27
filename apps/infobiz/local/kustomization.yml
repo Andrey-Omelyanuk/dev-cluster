@@ -7,15 +7,10 @@ resources:
   - sealed-secrets.yml
 
 images:
-  - { name: front-react, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
-  - { name: back       , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
+  - { name: front, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
+  - { name: back , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
 
 patches:
-  - path: deployment-patches/back.yml
-  - path: deployment-patches/beat.yml
-  - path: deployment-patches/flower.yml
-  - path: deployment-patches/front.yml
-  - path: deployment-patches/worker.yml
   - path: service-patches/back.yml
   - path: service-patches/flower.yml
   - path: service-patches/front.yml
@@ -35,6 +30,7 @@ configMapGenerator:
       - DOMAIN=dev.localhost
       - ALLOWED_HOSTS=dev.localhost
       # - CSRF_TRUSTED_ORIGINS=https://.online
+
       - ADMINS=Andrey=omelyanukandrey@gmail.com
       - MANAGERS=omelyanukandrey@gmail.com
       - DB_HOST=master.postgres.svc.cluster.local

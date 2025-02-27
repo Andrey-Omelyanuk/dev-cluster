@@ -17,6 +17,8 @@ spec:
       containers:
         - name: beat 
           image: back 
+          imagePullPolicy: Always
+          command: [ "celery", "-A", "main", "beat", "-l", "info", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler" ] 
           envFrom:
             - configMapRef: { name: back }
             - secretRef:    { name: back }

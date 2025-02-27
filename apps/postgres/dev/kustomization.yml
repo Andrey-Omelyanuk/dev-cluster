@@ -6,6 +6,8 @@ resources:
   - ../base
   - master/pv.yml
   - sealed-secrets.yml
+  - jobs/create-gitea-db.yml
+  - jobs/create-infobiz-db.yml
 
 patches:
   - path: master/patch-pvc.yml
@@ -21,5 +23,3 @@ configMapGenerator:
     literals:
       - POSTGRES_DB=main 
       - POSTGRES_USER=postgres 
-      - GITEA_DB=gitea 
-      - GITEA_USER=gitea

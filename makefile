@@ -83,7 +83,8 @@ all-secrets-update:
 
 registry-update:
 	docker login repo.edtechworld.pl
-	@for ns in infobiz gitea; do \
+	@for ns in kube-system infobiz gitea; do \
+		echo "Update registry credentials for $$ns"; \
 		kubectl create secret generic registry-credentials \
 			--from-file=.dockerconfigjson=/home/andrey/.docker/config.json \
 			--type=kubernetes.io/dockerconfigjson \

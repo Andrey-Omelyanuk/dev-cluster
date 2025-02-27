@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-infobiz-db
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      nodeSelector: { node: main }
+      containers:
+        - name: postgres
+          image: postgres:16.6-alpine3.21
+          env:
+            - { name: NEW_DB      , value: infobiz }
+            - { name: NEW_USER    , value: infobiz }
+            - { name: NEW_PASSWORD, valueFrom: { secretKeyRef: { name: main, key: INFOBIZ_PASSWORD }}}
+            - { name: PGHOST      , value: master }
+            - { name: PGPASSWORD  , valueFrom: { secretKeyRef: { name: main, key: POSTGRES_PASSWORD }}}
+          envFrom:
+            - configMapRef: { name: master }
+            - secretRef:    { name: main }
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              # Attempt to change password for the user; if user does not exist then create the user.
+              psql -v ON_ERROR_STOP=0 --username "$POSTGRES_USER" -c "ALTER USER $NEW_USER WITH PASSWORD '$NEW_PASSWORD'"
+              psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "CREATE USER $NEW_USER WITH PASSWORD '$NEW_PASSWORD'"
+              
+              # Attempt to create database if it does not exist.
+              psql -v ON_ERROR_STOP=0 --username "$POSTGRES_USER" -c "CREATE DATABASE $NEW_DB"
+              psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "ALTER DATABASE $NEW_DB OWNER TO $NEW_USER"

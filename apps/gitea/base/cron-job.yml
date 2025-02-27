@@ -11,8 +11,8 @@ spec:
           securityContext:
             runAsUser: 1000  # git user, only this user should create a dump
           volumes:
-            - { name: data, persistentVolumeClaim: { claimName: gitea }}
-            - { name: temp, persistentVolumeClaim: { claimName: gitea-tmp }}
+            - { name: data, persistentVolumeClaim: { claimName: main }}
+            - { name: tmp, persistentVolumeClaim: { claimName: tmp }}
           containers:
             - name: gitea 
               image: gitea/gitea:1.23.3
@@ -21,13 +21,13 @@ spec:
               command: ["/usr/local/bin/gitea", "dump", "-c", "/data/gitea/conf/app.ini", ]
               workingDir: /tmp
               envFrom:
-                - configMapRef: { name: gitea-config }
-                - secretRef   : { name: gitea-secret }
+                - configMapRef: { name: main }
+                - secretRef   : { name: main }
               # ports:
               #   - { name: ssh , containerPort: 2222 }
               #   - { name: http, containerPort: 3000 }
               volumeMounts:
-                - { name: temp, mountPath: /tmp }
+                - { name: tmp, mountPath: /tmp }
                 - { name: data, mountPath: /data }
               resources:
                 limits: { cpu: '1', memory: 1Gi }

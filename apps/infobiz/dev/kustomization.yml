@@ -1,48 +1,56 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: infobiz-dev 
+namespace: infobiz
 resources:
   - ../base
-  - config.yml 
-  - config.pub-sub.yml
+  - sealed-secrets.yml
   - ingress.yml
 
 images:
-  - { name: front-react, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
-  - { name: back       , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
-
-patches:
-  - path: deployment-patches/back.yml
-  - path: deployment-patches/beat.yml
-  - path: deployment-patches/flower.yml
-  - path: deployment-patches/front.yml
-  - path: deployment-patches/worker.yml
+  - { name: front, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
+  - { name: back , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
 
 configMapGenerator:
 
-  - name: pub-sub-config 
+  - name: back
     # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
     # so in this case it is not make sense to use suffix hash for configmap
     # keep it simple
     options:
       disableNameSuffixHash: true
     literals:
-      - CENTRIFUGO_LOG_LEVEL=debug
-      - CENTRIFUGO_ALLOWED_ORIGINS="['*']"
+      - DEBUG=True
+      # - DEBUG_TOOLBAR=True
+      - SCHEMA=https
+      - DOMAIN=api.dev1.edtechworld.pl
+      - ALLOWED_HOSTS=dev1.edtechworld.pl,api.dev1.edtechworld.pl
+      - CSRF_TRUSTED_ORIGINS=dev1.edtechworld.pl,api.dev1.edtechworld.pl
 
-  - name: back-config 
+      - ADMINS=Andrey=omelyanukandrey@gmail.com
+      - MANAGERS=omelyanukandrey@gmail.com
+
+      - DB_HOST=master.postgres.svc.cluster.local
+      - DB_PORT=5432
+      - DB_NAME=infobiz
+      - DB_USER=infobiz
+
+      - S3_ENDPOINT_URL=http://main.minio.svc.cluster.local:9000
+      - S3_EXTERNAL_ENDPOINT_URL=s3.edtechworld.pl
+      - S3_BUCKET_NAME=infobiz-dev
+
+      - CENTRIFUGO_HTTP_API_ENDPOINT=http://pub-sub:8000
+      - CELERY_BROKER_URL=redis://main.redis.svc.cluster.local:6379/0
+
+  - name: pub-sub
     options:
       disableNameSuffixHash: true
     literals:
-      - DEBUG=True
-      # - ALLOWED_HOSTS=dev.???.online
-      # - CSRF_TRUSTED_ORIGINS=https://???.online
-      - ADMINS=
-      - MANAGERS=
-      - CELERY_BROKER_URL=redis://:@redis:6379/0
-      # - DB_HOST=???
-      - DB_NAME=infobiz-dev
-      - DB_USER=infobiz-dev
-      # - S3_ENDPOINT_URL=http://minio:9000
-      - S3_BUCKET_NAME=infobiz-dev
+      - CENTRIFUGO_LOG_LEVEL=debug
+      - CENTRIFUGO_ALLOWED_ORIGINS="['*']"
+
+  - name: pub-sub-config-file
+    options:
+      disableNameSuffixHash: true
+    files:
+      - config.json=pub-sub-config.json

@@ -15,6 +15,8 @@ spec:
       containers:
         - name: back-flower
           image: back 
+          imagePullPolicy: Always
+          command: [ "celery", "-A", "main", "flower", "--port=8888", "url_prefix=flower" ]
           ports:
             - { name: flower-http, containerPort: 8888 }
           envFrom:

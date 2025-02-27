@@ -17,6 +17,8 @@ spec:
       containers:
         - name: worker
           image: back 
+          imagePullPolicy: Always
+          command: [ "celery", "-A", "main", "worker", "-l", "info" ]
           envFrom:
             - configMapRef: { name: back }
             - secretRef:    { name: back }

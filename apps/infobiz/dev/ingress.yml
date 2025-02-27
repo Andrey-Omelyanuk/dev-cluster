@@ -7,21 +7,16 @@ metadata:
 spec:
   ingressClassName: traefik
   tls:
-  # - hosts:
-  #     - dev.???.online 
-  #   secretName: dev-???-online-tls
+  - hosts:
+      - dev1.edtechworld.pl
+      - api.dev1.edtechworld.pl
+    secretName: dev1-edtechworld-pl
   rules:
-    - host: dev.???.online
+    - host: dev1.edtechworld.pl
       http:
         paths:
-          - { path: /auth/,         pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          - { path: /api/,          pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          # Should be declared only in the dev patch
-          - { path: /admin/,        pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          - { path: /back-static/,  pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          - { path: /back-media/,   pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          - { path: /__debug__/,    pathType: Prefix, backend: { service: { name: main, port: { name: back-http } } } }
-          #
-          - { path: /connection/websocket, pathType: Prefix, backend: { service: { name: main, port: { name: websocket } } } }
-
-          - { path: /,             pathType: Prefix, backend: { service: { name: main, port: { name: front-http } } } }
+          - { path: /, pathType: Prefix, backend: { service: { name: front, port: { name: front-http } } } }
+    - host: api.dev1.edtechworld.pl
+      http:
+        paths:
+          - { path: /, pathType: Prefix, backend: { service: { name: back, port: { name: back-http } } } }

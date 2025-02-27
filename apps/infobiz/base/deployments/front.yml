@@ -16,7 +16,8 @@ spec:
         - name: registry-credentials
       containers:
         - name: front
-          image: front-react 
+          image: front 
+          imagePullPolicy: Always
           ports:
             - { name: front-http, containerPort: 80 }
           resources: {} 
