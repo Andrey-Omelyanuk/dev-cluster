@@ -20,4 +20,6 @@ spec:
           imagePullPolicy: Always
           ports:
             - { name: front-http, containerPort: 80 }
+          envFrom:
+            - configMapRef: { name: front }
           resources: {} 

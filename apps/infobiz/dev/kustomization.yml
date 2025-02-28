@@ -6,6 +6,7 @@ resources:
   - ../base
   - sealed-secrets.yml
   - ingress.yml
+  - jobs/create-admin-user.yml
 
 images:
   - { name: front, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
@@ -41,6 +42,12 @@ configMapGenerator:
 
       - CENTRIFUGO_HTTP_API_ENDPOINT=http://pub-sub:8000
       - CELERY_BROKER_URL=redis://main.redis.svc.cluster.local:6379/0
+
+  - name: front 
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - API_ENDPOINT=https://api.dev1.edtechworld.pl/
 
   - name: pub-sub
     options:

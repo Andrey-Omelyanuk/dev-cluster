@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-admin-user
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: back 
+          image: back 
+          imagePullPolicy: Always
+          command: [ "sh", "-c", "python manage.py createsuperuser --noinput"] 
+          env:
+            - { name: DJANGO_SUPERUSER_USERNAME, value: andrey }
+            - { name: DJANGO_SUPERUSER_EMAIL   , value: omelyanukandrey@gmail.com }
+          envFrom:
+            - configMapRef: { name: back }
+            - secretRef:    { name: back }
+          resources: {}
