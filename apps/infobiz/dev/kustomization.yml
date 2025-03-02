@@ -8,9 +8,13 @@ resources:
   - ingress.yml
   - jobs/create-admin-user.yml
 
+patches:
+  - path: service-patches/flower.yml
+
 images:
   - { name: front, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
   - { name: back , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
+
 
 configMapGenerator:
 
@@ -26,7 +30,7 @@ configMapGenerator:
       - SCHEMA=https
       - DOMAIN=api.dev1.edtechworld.pl
       - ALLOWED_HOSTS=dev1.edtechworld.pl,api.dev1.edtechworld.pl
-      - CSRF_TRUSTED_ORIGINS=dev1.edtechworld.pl,api.dev1.edtechworld.pl
+      - CSRF_TRUSTED_ORIGINS=https://dev1.edtechworld.pl,https://api.dev1.edtechworld.pl
 
       - ADMINS=Andrey=omelyanukandrey@gmail.com
       - MANAGERS=omelyanukandrey@gmail.com
@@ -36,9 +40,11 @@ configMapGenerator:
       - DB_NAME=infobiz
       - DB_USER=infobiz
 
-      - S3_ENDPOINT_URL=http://main.minio.svc.cluster.local:9000
+      - S3_ENDPOINT_URL=main.minio.svc.cluster.local:9000
       - S3_EXTERNAL_ENDPOINT_URL=s3.edtechworld.pl
-      - S3_BUCKET_NAME=infobiz-dev
+      - S3_EXTERNAL_ENDPOINT_USE_HTTPS=True
+      - S3_PRIVATE_BUCKETS=infobiz-dev
+      - S3_PUBLIC_BUCKETS=infobiz-dev-public
 
       - CENTRIFUGO_HTTP_API_ENDPOINT=http://pub-sub:8000
       - CELERY_BROKER_URL=redis://main.redis.svc.cluster.local:6379/0
