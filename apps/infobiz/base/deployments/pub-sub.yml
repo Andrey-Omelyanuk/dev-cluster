@@ -24,8 +24,5 @@ spec:
             - { name: config-file, mountPath: /centrifugo/config.json, subPath: config.json }
           envFrom:
             - configMapRef: { name: pub-sub }
-            # - secretRef:    { name: pub-sub }
-          env:
-            - { name: CENTRIFUGO_PORT, value: "8000" }
-            - { name: CENTRIFUGO_ADDRESS, value: "0.0.0.0" }
+            - secretRef:    { name: pub-sub }
           resources: {} 

@@ -8,7 +8,7 @@ resources:
   - apps/core/sealed-secrets.yml
   # - apps/core/cert-manager.yml
   # - apps/dashboard.yml
-  # - apps/core/monitoring.yml
+  - apps/core/monitoring.yml
   # - apps/core/logs.yml
   # - apps/postgres.yml
   # # PG Back Web

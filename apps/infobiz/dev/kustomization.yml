@@ -46,7 +46,7 @@ configMapGenerator:
       - S3_PRIVATE_BUCKETS=infobiz-dev
       - S3_PUBLIC_BUCKETS=infobiz-dev-public
 
-      - CENTRIFUGO_HTTP_API_ENDPOINT=http://pub-sub:8000
+      - PUB_SUB_API_ENDPOINT=http://pub-sub.infobiz.svc.cluster.local:31004
       - CELERY_BROKER_URL=redis://main.redis.svc.cluster.local:6379/0
 
   - name: front 
