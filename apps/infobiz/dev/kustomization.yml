@@ -28,9 +28,10 @@ configMapGenerator:
       - DEBUG=True
       # - DEBUG_TOOLBAR=True
       - SCHEMA=https
-      - DOMAIN=api.dev1.edtechworld.pl
+      - DOMAIN=dev1.edtechworld.pl
       - ALLOWED_HOSTS=dev1.edtechworld.pl,api.dev1.edtechworld.pl
       - CSRF_TRUSTED_ORIGINS=https://dev1.edtechworld.pl,https://api.dev1.edtechworld.pl
+      - LOGIN_REDIRECT_URL=https://dev1.edtechworld.pl
 
       - ADMINS=Andrey=omelyanukandrey@gmail.com
       - MANAGERS=omelyanukandrey@gmail.com
