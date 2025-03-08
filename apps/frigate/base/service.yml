@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate-svc
+spec:
+  type: ClusterIP 
+  selector: { app: frigate }
+  ports:
+    # All ports should have prefix 3 to avoid conflicts with other services
+    - { name: http        , port: 35000, protocol: TCP, targetPort: http }
+    - { name: http-auth   , port: 38971, protocol: TCP, targetPort: http-auth }
+    - { name: rtmp        , port: 31935, protocol: TCP, targetPort: rtmp }
+    - { name: rtsp        , port: 38554, protocol: TCP, targetPort: rtsp }
+    - { name: webrtc-udp  , port: 38555, protocol: UDP, targetPort: webrtc-udp }
+    - { name: webrtc-tcp  , port: 38555, protocol: TCP, targetPort: webrtc-tcp }
+    - { name: go2rtc-admin, port: 31984, protocol: TCP, targetPort: go2rtc-admin }

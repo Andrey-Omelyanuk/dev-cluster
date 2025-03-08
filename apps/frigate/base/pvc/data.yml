@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: data
+spec:
+  selector: 
+    matchLabels: { app: frigate }
+  accessModes: 
+    - ReadWriteOnce
