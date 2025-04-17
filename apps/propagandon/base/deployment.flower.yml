@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: flower, labels: { app: propagandon } }
+spec:
+  replicas: 1 
+  selector: { matchLabels: { app: propagandon, type: flower } }
+  template:
+    metadata: { labels: { app: propagandon, type: flower } }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: flower
+          image: back 
+          ports:
+            - { name: flower-http, containerPort: 8888 }
+          envFrom:
+            - configMapRef: { name: back-config }
+            - secretRef:    { name: back-secret }
+          resources: {} 

@@ -1,0 +1,10 @@
+# K8S use it for get access to private registry
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: |
+    ewoJImF1dGhzIjogewoJCSJnaXRlYS5wcm9wYWdhbmRvbi5vbmxpbmUiOiB7CgkJCSJhdXRoIjog
+    IllXNWtjbVY1T2psdmJDNHdjRHN2TFQwPSIKCQl9Cgl9Cn0=

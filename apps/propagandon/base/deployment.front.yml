@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: front, labels: { app: propagandon } }
+spec:
+  replicas: 1 
+  selector: { matchLabels: { app: propagandon, type: front } }
+  template:
+    metadata: { labels: { app: propagandon, type: front } }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: front
+          image: front-react 
+          ports:
+            - { name: front-http, containerPort: 80 }
+          resources: {} 

@@ -117,3 +117,4 @@ stop:
 
 delete:
 	minikube delete --all
+

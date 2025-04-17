@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: propagandon
+spec:
+  type: NodePort 
+  externalIPs: [ 10.8.1.10 ]
+  selector: { app: propagandon }
+  ports:
+    - { name: front-http,   port: 31001, targetPort: front-http  }
+    - { name: back-http,    port: 31002, targetPort: back-http   }
+    - { name: flower-http,  port: 31003, targetPort: flower-http }
+    - { name: websocket ,   port: 31004, targetPort: websocket   }
+
+--- 
+kind: Service
+apiVersion: v1
+metadata: { name: postgres }
+spec:
+  type: ExternalName
+  externalName: postgres.default.svc.cluster.local
+  ports:
+    - { name: postgres-http, port: 5432, targetPort: postgres-http }
+
+--- 
+kind: Service
+apiVersion: v1
+metadata: { name: redis }
+spec:
+  type: ExternalName
+  externalName: redis.default.svc.cluster.local
+  ports:
+    - { name: redis-http, port: 6379, targetPort: redis-http }
+
+--- 
+kind: Service
+apiVersion: v1
+metadata: { name: minio }
+spec:
+  type: ExternalName
+  externalName: minio.default.svc.cluster.local
+  ports:
+    - { name: minio-http, port: 9000, targetPort: minio-http }

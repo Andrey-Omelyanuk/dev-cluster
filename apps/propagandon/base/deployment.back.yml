@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: back, labels: { app: propagandon } }
+spec:
+  replicas: 1 
+  selector: { matchLabels: { app: propagandon, type: back } }
+  template:
+    metadata: { labels: { app: propagandon, type: back } }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: back 
+          image: back 
+          ports:
+            - { name: back-http, containerPort: 8000 }
+          envFrom:
+            - configMapRef: { name: back-config }
+            - secretRef:    { name: back-secret }
+          resources: {}

@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - config.yml 
+  - config.pub-sub.yml
+  - deployment.back.yml
+  - deployment.beat.yml
+  - deployment.flower.yml
+  - deployment.front.yml
+  - deployment.pub-sub.yml
+  - deployment.worker.yml

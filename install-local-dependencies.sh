@@ -1,8 +1,3 @@
-# sudo apt update
-sudo apt install software-properties-common
-sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt install -y ansible
-
 # install kubectl
 KUBECTL_VERSION=v1.31.3
 curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"

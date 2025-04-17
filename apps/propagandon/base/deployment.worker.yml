@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: worker, labels: { app: propagandon } }
+spec:
+  replicas: 1 
+  selector: { matchLabels: { app: propagandon, type: worker } }
+  template:
+    metadata: { labels: { app: propagandon, type: worker } }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: worker
+          image: back 
+          envFrom:
+            - configMapRef: { name: back-config }
+            - secretRef:    { name: back-secret }
+          resources: {} 

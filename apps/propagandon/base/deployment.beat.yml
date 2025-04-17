@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: beat, labels: { app: propagandon } }
+spec:
+  replicas: 1 
+  selector: { matchLabels: { app: propagandon, type: beat } }
+  template:
+    metadata: { labels: { app: propagandon, type: beat } }
+    spec:
+      nodeSelector: { node: main }
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+        - name: beat 
+          image: back 
+          envFrom:
+            - configMapRef: { name: back-config }
+            - secretRef:    { name: back-secret }
+          resources: {}

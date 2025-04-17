@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: { name: back }
+spec:
+  template:
+    spec:
+      containers:
+        - name: back 
+          imagePullPolicy: Always
+          command: [ "sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
