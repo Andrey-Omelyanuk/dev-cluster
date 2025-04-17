@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres 
+  namespace: argocd 
+spec:
+  project: default
+  source:
+    path: apps/postgres/local
+    repoURL: 'https://github.com/Andrey-Omelyanuk/dev-cluster'
+    targetRevision: dev
+  destination:
+    namespace: postgres 
+    server: 'https://kubernetes.default.svc'

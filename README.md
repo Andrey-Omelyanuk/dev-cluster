@@ -43,3 +43,9 @@ Env declare:
 - pvc
 - ingress / NodePort service
 - PATCH: deployments / stateful-set 
+
+=================
+There are three env:
+- local - for local test on minikube
+- dev   - for dev cluster
+- prod  - for prod cluster 
