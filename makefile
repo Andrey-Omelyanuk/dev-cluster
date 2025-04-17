@@ -102,11 +102,14 @@ install:
 
 # Note: Minikube config is close to the real dev cluster.
 # Note: Don't need to setup kubectl context, it will be switched automatically
-start:
+init:
 	minikube start -p $(CLUSTER_NAME) --nodes=3 --memory=4096 --cpus=4 
 	kubectl label node dev-cluster     node=public
 	kubectl label node dev-cluster-m02 node=storage
 	kubectl label node dev-cluster-m03 node=main
+
+start:
+	minikube start -p $(CLUSTER_NAME)
 
 info:
 	minikube profile list

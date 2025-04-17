@@ -13,7 +13,7 @@ spec:
     repoURL: https://kubernetes.github.io/dashboard/
   destination:
     server: https://kubernetes.default.svc
-    namespace: default 
+    namespace: kubernetes-dashboard
   syncPolicy:
     automated:
       prune: true
