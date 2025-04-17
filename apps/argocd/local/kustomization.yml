@@ -9,9 +9,9 @@ resources:
   # - apps/dashboard.yml
   # - apps/monitoring.yml
   # - apps/logs.yml
-  # - apps/postgres.yml
-  # # PG Back Web
+  # PG Back Web
+  - apps/dev/postgres.yml
+  - apps/dev/minio.yml
   # - apps/redis.yml
   # - apps/mongodb.yml
   # - apps/gitea.yml
-  # - apps/minio.yml

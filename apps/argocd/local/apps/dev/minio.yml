@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: MinIO 
+  namespace: argocd 
+spec:
+  project: default
+  source:
+    path: apps/minio/local
+    repoURL: 'https://github.com/Andrey-Omelyanuk/dev-cluster'
+    targetRevision: dev
+  destination:
+    namespace: minio 
+    server: 'https://kubernetes.default.svc'
