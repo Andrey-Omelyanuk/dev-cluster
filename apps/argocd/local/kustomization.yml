@@ -6,12 +6,9 @@ resources:
   - ../base 
   # Base
   - apps/core/sealed-secrets.yml
-  # - apps/dashboard.yml
-  # - apps/monitoring.yml
-  # - apps/logs.yml
   # PG Back Web
+  - apps/dev/redis.yml
   - apps/dev/postgres.yml
   - apps/dev/minio.yml
-  # - apps/redis.yml
-  # - apps/mongodb.yml
-  # - apps/gitea.yml
+  # Infobiz
+  # - apps/infobiz/infobiz.yml

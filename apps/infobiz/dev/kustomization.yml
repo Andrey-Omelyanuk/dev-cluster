@@ -8,16 +8,14 @@ resources:
   - ingress.yml
   - jobs/create-admin-user.yml
 
-patches:
-  - path: service-patches/flower.yml
-
 images:
   - { name: front, newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-front }
   - { name: back , newTag: dev, newName: repo.edtechworld.pl/edtechworld/infobiz-back  }
 
+patches:
+  - path: service-patches/flower.yml
 
 configMapGenerator:
-
   - name: back
     # anyway secrets are hadled by sealed-secrets and we have to restart pods to apply new config
     # so in this case it is not make sense to use suffix hash for configmap
