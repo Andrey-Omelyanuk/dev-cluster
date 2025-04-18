@@ -23,7 +23,7 @@ configMapGenerator:
       - DEBUG_TOOLBAR=True
       - SCHEMA=http
       - DOMAIN=dev.localhost
-      - ALLOWED_HOSTS=dev.localhost,api.dev.localhost
+      - ALLOWED_HOSTS=dev.localhost,api.dev.localhost,192.168.49.2
       - CSRF_TRUSTED_ORIGINS=http://dev.localhost,http://api.dev.localhost
       - LOGIN_REDIRECT_URL=http://dev.localhost
 

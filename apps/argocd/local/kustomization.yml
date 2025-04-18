@@ -12,4 +12,4 @@ resources:
   - apps/dev/postgres.yml
   - apps/dev/minio.yml
   # Infobiz
-  # - apps/infobiz/infobiz.yml
+  - apps/infobiz/infobiz.yml
