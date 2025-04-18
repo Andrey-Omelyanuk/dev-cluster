@@ -6,13 +6,10 @@ resources:
   - ../base 
   # Base
   - apps/core/sealed-secrets.yml
-  # - apps/core/dashboard.yml
+  - apps/core/dashboard.yml
   # PG Back Web
-  - apps/dev/redis.yml
-  - apps/dev/postgres.yml
-  - apps/dev/minio.yml
+  # - apps/dev/redis.yml
+  # - apps/dev/postgres.yml
+  # - apps/dev/minio.yml
   # Infobiz
-  - apps/infobiz/infobiz.yml
-
-patches:
-  - path: service-patch.yml
+  # - apps/infobiz/infobiz.yml

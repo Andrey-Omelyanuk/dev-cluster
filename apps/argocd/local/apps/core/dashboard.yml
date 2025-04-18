@@ -6,14 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    # https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard
-    chart: kubernetes-dashboard
-    # this is the chart version, not the app version
-    targetRevision: 7.10.4
-    repoURL: https://kubernetes.github.io/dashboard/
+    path: apps/dashboard/local
+    repoURL: 'https://github.com/Andrey-Omelyanuk/dev-cluster'
+    targetRevision: dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: kubernetes-dashboard
+    namespace: kubernetes-dashboard 
   syncPolicy:
     automated:
       prune: true
