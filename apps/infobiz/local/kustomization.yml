@@ -23,9 +23,7 @@ configMapGenerator:
       - DEBUG_TOOLBAR=True
       - SCHEMA=http
       - DOMAIN=dev.localhost
-      - ALLOWED_HOSTS=192.168.49.2
-      - CSRF_TRUSTED_ORIGINS=http://192.168.49.2
-      - LOGIN_REDIRECT_URL=http://192.168.49.2:31002
+      - LOGIN_REDIRECT_URL=http://dev.localhost
 
       - ADMINS=Andrey=omelyanukandrey@gmail.com
       - MANAGERS=omelyanukandrey@gmail.com
@@ -36,7 +34,7 @@ configMapGenerator:
       - DB_USER=infobiz
 
       - S3_ENDPOINT_URL=main.minio.svc.cluster.local:9000
-      - S3_EXTERNAL_ENDPOINT_URL=192.168.49.2:9000
+      - S3_EXTERNAL_ENDPOINT_URL=s3.dev.localhost
       - S3_EXTERNAL_ENDPOINT_USE_HTTPS=False
       - S3_PRIVATE_BUCKETS=infobiz-dev
       - S3_PUBLIC_BUCKETS=infobiz-dev-public
@@ -46,7 +44,7 @@ configMapGenerator:
 
   - name: front 
     literals:
-      - API_ENDPOINT=http://api.dev.localhost/
+      - API_ENDPOINT=http://main.dev.localhost/
 
   - name: pub-sub
     literals:

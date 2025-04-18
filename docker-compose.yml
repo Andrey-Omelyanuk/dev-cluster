@@ -1,0 +1,19 @@
+services:
+  nginx:
+    image: nginx:1.25
+    volumes:
+      # nginx.conf.template will be processed by envsubst 
+      # to replace the variables from the environment
+      # the result will be saved in /etc/nginx/nginx.conf 
+      - ./nginx.conf:/etc/nginx/templates/nginx.conf.template:ro
+    ports:
+      - 80:80
+    environment:
+      DOMAIN: dev.localhost
+      NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx
+    networks:
+      - dev-cluster
+
+networks:
+  dev-cluster:
+    external: true

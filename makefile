@@ -94,6 +94,7 @@ registry-update:
 # -------------------------------------------------------------------------
 # -- How to test k8s apps locally -----------------------------------------
 # -------------------------------------------------------------------------
+PROJECT_NAME=dev-cluster-proxy
 
 install:
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
@@ -110,6 +111,7 @@ init:
 
 start:
 	minikube start -p $(CLUSTER_NAME)
+	docker compose -p $(PROJECT_NAME) up -d
 
 info:
 	minikube profile list
@@ -117,7 +119,8 @@ info:
 
 stop:
 	minikube stop -p $(CLUSTER_NAME)
+	docker compose -p $(PROJECT_NAME) stop
 
 delete:
 	minikube delete --all
-
+	docker compose -p $(PROJECT_NAME) down -v
