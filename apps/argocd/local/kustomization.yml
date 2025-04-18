@@ -13,3 +13,6 @@ resources:
   - apps/dev/minio.yml
   # Infobiz
   - apps/infobiz/infobiz.yml
+
+patches:
+  - path: service-patch.yml
