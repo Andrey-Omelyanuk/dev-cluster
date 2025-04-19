@@ -8,8 +8,8 @@ resources:
   - apps/core/sealed-secrets.yml
   - apps/core/dashboard.yml
   # PG Back Web
-  # - apps/dev/redis.yml
-  # - apps/dev/postgres.yml
-  # - apps/dev/minio.yml
+  - apps/dev/redis.yml
+  - apps/dev/postgres.yml
+  - apps/dev/minio.yml
   # Infobiz
-  # - apps/infobiz/infobiz.yml
+  - apps/infobiz/infobiz.yml
